@@ -16,13 +16,14 @@
             <span class="sr-only">Loading...</span>
         </div>
         <div 
-            v-else-if="records.length !== 0" 
+            v-else-if="records.length !== 0"
             class="flex flex-col divide-y divide-slate-800"
         >
             <ItemRow 
-                v-for="record in records" 
+                v-for="record in records"
                 :record="record"
                 @remove-item="removeItem"
+                @save-item="(record, loaderCallback) => { $emit('save-item', record, loaderCallback); }"
                 :key="record.id"
             >
             </ItemRow>
@@ -47,10 +48,6 @@ export default {
             default: () => false,
         },
         title: String,
-    },
-    data() {
-        return {
-        };
     },
     methods: {
         removeItem(record) {
