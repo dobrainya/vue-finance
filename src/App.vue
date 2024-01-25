@@ -106,10 +106,18 @@ export default {
         };
     },
     methods: {
-        async createItem(record) {
+        async createItem(record, successCallback) {
             try {
                 if (record.type === '') {
                     throw Error('Select category');
+                }
+
+                if (record.name === '') {
+                    throw Error('Please, specify the name');
+                }
+
+                if (record.amount === '' || record.amount <= 0) {
+                    throw Error('Amount can\'t be empty or 0');
                 }
                 this.formIsProcessing = true;
                 const response = await axios.post('http://app.local/api/amount/create', record, {
@@ -118,9 +126,12 @@ export default {
                     },
                 });
 
-                this[response.data.type === 'inc' ? 'incomes' : 'expenses'].push(response.data);
+                this[response.data.item.type === 'inc' ? 'incomes' : 'expenses'].push(response.data.item);
+
+                successCallback(true);
             } catch (e) {
                 alert(e.message);
+                successCallback(false);
             } finally {
                 this.formIsProcessing = false;
             }
@@ -168,7 +179,7 @@ export default {
                     },
                 });
 
-                this.expenses = response.data;
+                this.expenses = response.data.items;
             } catch (e) {
                 alert('Ошибка');
             } finally {
@@ -184,7 +195,7 @@ export default {
                     },
                 });
 
-                this.incomes = response.data;
+                this.incomes = response.data.items;
             } catch (e) {
                 alert('Ошибка');
             } finally {

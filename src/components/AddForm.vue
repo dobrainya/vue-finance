@@ -68,10 +68,15 @@
         },
         methods: {
             createItem() {
-                this.$emit('create-item', this.record);
-                this.record.name = null;
-                this.record.amount = null;
-                this.record.type = null;
+                this.$emit('create-item', this.record, (success) => {
+                    if (!success) {
+                        return;
+                    }
+
+                    this.record.name = null;
+                    this.record.amount = null;
+                    this.record.type = null;
+                });
             },
         },
     };
