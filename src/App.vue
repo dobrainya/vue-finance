@@ -120,7 +120,7 @@ export default {
                     throw Error('Amount can\'t be empty or 0');
                 }
                 this.formIsProcessing = true;
-                const response = await axios.post('http://app.local/api/amount/create', record, {
+                const response = await axios.post('http://app.local/api/v1/amount/', record, {
                     headers: {
                         'content-type': 'application/x-www-form-urlencoded'
                     },
@@ -162,8 +162,8 @@ export default {
         async fetchReferences() {
             try {
                 this.formIsProcessing = true;
-                const response = await axios.get('http://app.local/api/refs');
-                this.references = response.data;
+                const response = await axios.get('http://app.local/api/v1/refs');
+                this.references = response.data.items;
             } catch (e) {
                 alert('Ошибка');
             } finally {
@@ -173,7 +173,7 @@ export default {
         async fetchExpenses() {
             try {
                 this.expensesIsLoading = true;
-                const response = await axios.get('http://app.local/api/amount/expenses', {
+                const response = await axios.get('http://app.local/api/v1/amount/exp', {
                     params: {
                         _limit: 10,
                     },
@@ -189,7 +189,7 @@ export default {
         async fetchIncomes() {
             try {
                 this.incomesIsLoading = true;
-                const response = await axios.get('http://app.local/api/amount/incomes', {
+                const response = await axios.get('http://app.local/api/v1/amount/inc', {
                     params: {
                         _limit: 10,
                     },
@@ -205,9 +205,9 @@ export default {
         async saveAmount(record, loaderCallback) {
             try {
                 loaderCallback(true);
-                const response = await axios.post(`http://app.local/api/amount/update/${record.id}`, record, {
+                const response = await axios.post(`http://app.local/api/v1/amount/${record.id}`, record, {
                     headers: {
-                        'content-type': 'application/x-www-form-urlencoded'
+                        'content-type': 'application/x-www-form-urlencoded',
                     },
                 });
             } catch (e) {
